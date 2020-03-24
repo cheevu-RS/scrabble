@@ -1,3 +1,13 @@
+### Setup
+```
+npm install
+```
+
+### Starting server
+```
+npm start
+```
+
 ### Scrabble 
 
 ## V1 - scrabble board
