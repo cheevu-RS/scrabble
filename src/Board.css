@@ -1,0 +1,6 @@
+div.Board{
+    margin-top : 10vh;
+    border-color : black;
+    border-width: 3px;
+    text-align : center;
+}
