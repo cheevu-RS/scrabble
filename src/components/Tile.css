@@ -1,0 +1,35 @@
+div.boardTile{
+    padding: 15px;
+    width : 20px;
+    height : 20px;
+    border-color : black;
+    border-width:  1px;
+    border-style: solid;
+}
+
+div.highlightedBoardTile{
+    padding: 15px;
+    width : 20px;
+    height : 20px;
+    border-color : red;
+    border-width :  1px;
+    border-style : solid;
+}
+
+div.slateTile{
+    padding: 15px;
+    width : 20px;
+    height : 20px;
+    border-color : black;
+    border-width:  1px;
+    border-style: solid;
+}
+
+div.highlightedSlateTile{
+    padding: 15px;
+    width : 20px;
+    height : 20px;
+    border-color : red;
+    border-width :  1px;
+    border-style : solid;
+}
