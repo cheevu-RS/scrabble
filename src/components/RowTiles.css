@@ -1,4 +1,4 @@
-div.rowtiles{
+div.RowTiles{
     display : flex;
     flex-direction: row;
     justify-content: center;

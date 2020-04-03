@@ -1,6 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import Tile from './Tile';
-import './RowTiles.css'
+import './RowTiles.css';
+
+// Mapping the state to props
+let mapStateToProps = (state, props) => {
+    let row = props.row
+    let letters = state.boardLetters[row]
+    return {
+        letters : letters
+    }
+}
 
 class RowTiles extends React.Component{
     constructor(props){
@@ -14,14 +25,14 @@ class RowTiles extends React.Component{
         
         // Creating the row of letters
         for(let index = 0; index < letters.length; ++index){
-            let tile = <Tile letter={letters[index]} key={index + 1}></Tile>;
+            let tile = <Tile row={this.props.row} col={index} key={index + 1} boardTile={true}></Tile>;
             tiles.push(tile)
         }
 
-        return (<div className="rowtiles">
+        return (<div className="RowTiles">
             {tiles}
         </div>);        
     }
 };
 
-export default RowTiles;
+export default connect(mapStateToProps)(RowTiles);
