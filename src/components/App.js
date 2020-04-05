@@ -1,6 +1,7 @@
 import React from 'react';
 import Board from './Board';
 import Slate from './Slate';
+import ScoreBoard from './ScoreBoard';
 import './App.css';
 
 class App extends React.Component {
@@ -11,14 +12,17 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        <div className="slate">
+          <h2> Letters </h2>
+          <Slate></Slate>
+          <h2> Score </h2>
+          <ScoreBoard></ScoreBoard>
+        </div>
         <div className="board">
           <h2> Scrabble app </h2>
           <Board></Board>
         </div>
-        <div className="playerSlate">
-          <h2> Player slate </h2>
-          <Slate></Slate>
-        </div>
+        
       </div>
     );
   }

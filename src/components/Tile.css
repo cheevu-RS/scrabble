@@ -1,35 +1,61 @@
 div.boardTile{
-    padding: 15px;
-    width : 20px;
-    height : 20px;
-    border-color : black;
+    width : 5%;
+    height : 50px;
+    border-color : white;
     border-width:  1px;
     border-style: solid;
-}
-
-div.highlightedBoardTile{
-    padding: 15px;
-    width : 20px;
-    height : 20px;
-    border-color : red;
-    border-width :  1px;
-    border-style : solid;
+    display : flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 div.slateTile{
-    padding: 15px;
-    width : 20px;
-    height : 20px;
-    border-color : black;
+    width : 25%;
+    height : 50px;
+    border-color : white;
     border-width:  1px;
     border-style: solid;
+    background-color : #FFFACD;
+    text-align : center;
+    margin-left : auto;
+    margin-right : auto;
+    display : flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
-div.highlightedSlateTile{
-    padding: 15px;
-    width : 20px;
-    height : 20px;
-    border-color : red;
-    border-width :  1px;
-    border-style : solid;
+div.highlighted{
+    background-color : #FFFACD !important;
+}
+
+div.occupied{
+    background-color : #FFFACD !important;
+}
+
+div.doubleLetter{
+    background-color : #87CEFA;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size : 11px;
+}
+
+div.doubleWord{
+    background-color : 	#F6A192;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size : 11px;
+}
+
+div.tripleLetter{
+    background-color : #4682B4;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size : 11px;
+}
+
+div.tripleWord{
+    background-color : #FF4500;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size : 11px;
+}
+
+div.letter{
+    background-color : #00CCAA;
 }
