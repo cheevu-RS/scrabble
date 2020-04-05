@@ -1,6 +1,6 @@
 import { createStore } from 'redux'
 
-import { SELECT_TILE, DESELECT_TILE, TOGGLE_VALID_TARGET, TRANSFER_LETTER } from './actions';
+import { SELECT_TILE, DESELECT_TILE, TRANSFER_LETTER } from './actions';
 
 // Creating the initial state
 let createInitialState = () => {
@@ -9,48 +9,77 @@ let createInitialState = () => {
   const height = 15
   const width = 15
 
-  let boardLetters = Array(height)
-  let multipliers = Array(height)
+  let boardTiles = Array(height)
 
   for (let row = 0; row < height; ++row) {
-    boardLetters[row] = Array(width)
-    multipliers[row] = Array(width)
+    boardTiles[row] = Array(width)
 
     for (let col = 0; col < width; ++col) {
       // Initializing the board with empty characters
-      let boardLetter = {
+      let boardTile = {
         letter: ' ',
         draggable: false,
         overValidTarget: false
       }
-      boardLetters[row][col] = boardLetter;
+      boardTiles[row][col] = boardTile;
+    }
+  }
 
-      // Initializing all multipliers as 1
-      multipliers[row][col] = 1
+  // Initializing all the multipliers
+  // NOTE : Format used here is [word, letter]
+  let multiplierArray = [
+    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1] ],
+    [[1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1] ],
+    [[1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1] ],
+    [[1, 2], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 2] ],
+    [[1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1] ],
+    [[1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1] ],
+    [[1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1] ],
+    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [3, 1] ],
+    [[1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1] ],
+    [[1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1] ],
+    [[1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1] ],
+    [[1, 2], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 2] ],
+    [[1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1] ],
+    [[1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1] ],
+    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [3, 1] ]
+  ]
+
+  // Mapping the above array to a list of objects
+  let multipliers = Array(height)
+
+  for(let row = 0; row < height; ++row){
+    multipliers[row] = Array(width)
+    for(let col = 0; col < width; ++col){
+      multipliers[row][col] = {
+        word : multiplierArray[row][col][0],
+        letter : multiplierArray[row][col][1]
+      }
     }
   }
 
   // Creating the slate state
-  let slateLetters = []
+  let slateTiles = []
   const slateSize = 7
   for (let count = 0; count < slateSize; ++count) {
     let letter = String.fromCharCode(65 + count)
-    let slateLetter = {
+    let slateTile = {
       letter: letter,
       draggable: true,
       overValidTarget: false
     }
-    slateLetters.push(slateLetter)
+    slateTiles.push(slateTile)
   }
 
   state = {
     boardHeight: height,
     boardWidth: width,
-    boardLetters: boardLetters,
+    boardTiles: boardTiles,
     multipliers: multipliers,
-    slateLetters: slateLetters,
+    slateTiles: slateTiles,
     slateSize: slateSize,
-    selectedTile: null
+    selectedTile: null,
+    score : 0
   }
 
   return state
@@ -86,28 +115,20 @@ let reducer = (state = initialState, action) => {
           let selectedLetter = selectedTile.letter
           let row = selectedTile.position.row
           let col = selectedTile.position.col
-          newState.boardLetters[row][col].letter = ' '
-          newState.boardLetters[row][col].draggable = false 
-          newState.selectedTile = null
+          newState.boardTiles[row][col].letter = ' '
+          newState.boardTiles[row][col].draggable = false
 
           // Inserting the letter into the slate
-          let slateLetters = newState.slateLetters
-          for (let tile of slateLetters) {
+          let slateTiles = newState.slateTiles
+          for (let tile of slateTiles) {
             if (!tile.letter || tile.letter === ' ') {
               tile.letter = selectedLetter
               break
             }
           }
-        } else {
-          // No change in position of the tile, simply reset selected tile
-          selectedTile = null
         }
+        newState.selectedTile = null
       }
-      break
-
-    case TOGGLE_VALID_TARGET:
-      // Toggling the selected letter's valid target property
-      selectedTile.overValidTarget = !selectedTile.overValidTarget
       break
 
     case TRANSFER_LETTER:
@@ -119,11 +140,11 @@ let reducer = (state = initialState, action) => {
       if (selectedTile.boardTile) {
         let row = sourcePosition.row
         let col = sourcePosition.col
-        let boardTile = newState.boardLetters[row][col]
+        let boardTile = newState.boardTiles[row][col]
         boardTile.letter = ' '
         boardTile.draggable = false
       } else {
-        let slateTile = newState.slateLetters[sourcePosition]
+        let slateTile = newState.slateTiles[sourcePosition]
         slateTile.letter = ' '
         slateTile.draggable = false
       }
@@ -131,7 +152,7 @@ let reducer = (state = initialState, action) => {
       // Transferring the letter to the destination
       let row = action.position.row
       let col = action.position.col
-      let destinationTile = newState.boardLetters[row][col]
+      let destinationTile = newState.boardTiles[row][col]
       destinationTile.letter = sourceLetter
       destinationTile.draggable = true
 

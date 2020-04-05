@@ -2,13 +2,17 @@
   text-align: center;
   display: flex;
   flex-direction: row;
+  width : 95%;
+  margin : auto;
 }
 
 .board{
-  padding-right: 40px;
-  padding-left : 40px;
+  margin: auto;
+  width : 80%;
 }
 
-.playerSlate{
-  
+.slate{
+  margin-left : auto;
+  margin-right : auto;
+  width : 16%;
 }

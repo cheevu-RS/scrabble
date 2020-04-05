@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { selectTile, deselectTile, toggleValidTarget, transferLetter } from '../redux/actions';
+import { selectTile, deselectTile, transferLetter } from '../redux/actions';
 
 import './Tile.css';
 
@@ -8,17 +8,21 @@ let mapStateToProps = (state, props) => {
     if (props.boardTile) {
         let row = props.row
         let col = props.col
-        return state.boardLetters[row][col]
+        return {
+            tile : state.boardTiles[row][col],
+            multiplier : state.multipliers[row][col]
+        }
     } else {
         let index = props.col
-        return state.slateLetters[index]
+        return {
+            tile : state.slateTiles[index]
+        }
     }
 }
 
 let mapDispatchToProps = {
     selectTile,
     deselectTile,
-    toggleValidTarget,
     transferLetter
 }
 
@@ -27,7 +31,7 @@ class Tile extends React.Component {
         super(props)     
         this.state = {
             highlight : false
-        }   
+        }
     }
 
     preventDefault = (event) => {
@@ -50,21 +54,18 @@ class Tile extends React.Component {
                     row : this.props.row,
                     col : this.props.col
                 },
-                letter : this.props.letter
+                letter : this.props.tile.letter
             }) 
         }else{ // For slate tiles
             this.props.selectTile({
                 boardTile : false,
                 position: this.props.col,
-                letter : this.props.letter
+                letter : this.props.tile.letter
             })
         }
     }
 
     toggleValidTarget = () => {
-        // Marking the drop position as valid
-        this.props.toggleValidTarget()
-        
         // Making the tile highlighted
         this.setState({
             highlight : !this.state.highlight
@@ -79,8 +80,8 @@ class Tile extends React.Component {
         }
 
         // If the position isn't already occupied by a tile, then do this
-        if(!this.props.letter || this.props.letter === ' '){
-            // Transferring data from the selected letter to the board tile
+        if(!this.props.tile.letter || this.props.tile.letter === ' '){
+            // Transferring data from the selected letter to this board tile
             this.props.transferLetter({
                 position : position
             })
@@ -94,20 +95,42 @@ class Tile extends React.Component {
 
     render = () => {
         let className = ""
+        let text = this.props.tile.letter
 
         // Rendering board tiles
         if (this.props.boardTile) {
-            // Checking if the tile should be highlighted
+            // Setting CSS classes on the basis of multipliers and state
             if (this.state.highlight) {
-                className = "highlightedBoardTile"
-            } else {
-                className = "boardTile"
+                className += "highlighted"
             }
-
+            
+            // If the tile is occupied, then forcing the CSS class to the class
+            if(this.props.tile.letter != " "){
+                className += " occupied"
+            }else{
+                if(this.props.multiplier.word === 2){
+                    className += " doubleWord"
+                    text = " DOUBLE WORD"
+                }else if(this.props.multiplier.word === 3){
+                    className += " tripleWord"
+                    text = " TRIPLE WORD"
+                }else if(this.props.multiplier.letter === 2){
+                    className += " doubleLetter"
+                    text = " DOUBLE LETTER"
+                }else if(this.props.multiplier.letter === 3){
+                    className += " tripleLetter"
+                    text = " TRIPLE LETTER"
+                }else{
+                    className += " letter";
+                }
+            }
+            
+            // Checking if the tile should be highlighted
+            className += " boardTile"
             return (
                 <div
                     className={className}
-                    draggable={this.props.draggable}
+                    draggable={this.props.tile.draggable}
                     onDragStart={this.setSelect}
                     onDragEnd={this.resetSelect}
                     onDragOver={this.preventDefault}
@@ -115,22 +138,18 @@ class Tile extends React.Component {
                     onDragEnter={this.toggleValidTarget}
                     onDrop={this.transferLetter}
                 >
-                    {this.props.letter}
+                    {text}
                 </div>
             );
         } else { // Rendering player slate tiles
             let style = {}
             
+            // Adding CSS class of slate
+            className += " slateTile"
+            
             // If the tile no longer has a letter, then make the tile hidden
-            if(!this.props.letter || this.props.letter === ' '){
+            if(!this.props.tile.letter || this.props.tile.letter === ' '){
                 style.visibility = "hidden" 
-            }
-
-            // Checking if the tile should be highlighted
-            if (this.state.highlight) {
-                className = "highlightedSlateTile"
-            } else {
-                className = "slateTile"
             }
 
             return (
@@ -141,7 +160,7 @@ class Tile extends React.Component {
                     onDragEnd={this.resetSelect}
                     style={style}
                 >
-                    {this.props.letter}
+                    {this.props.tile.letter}
                 </div>
             );
         }
