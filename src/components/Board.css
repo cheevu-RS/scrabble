@@ -1,5 +1,13 @@
+html, body, div {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+    
+  
 div.Board{
     border-color : black;
     border-width: 3px;
     text-align : center;
+    height : 95%;
 }

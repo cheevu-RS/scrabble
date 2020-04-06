@@ -1,0 +1,48 @@
+div.Chatbox{
+    display : flex;
+    flex-direction : column;
+    height : 95%;
+}
+
+div.Messages{
+    display : flex;
+    flex-direction: column;
+    height : 90%;
+    border-color : #DCDCDC;
+    border-radius : 1px;
+    border-style: solid;
+    border-width: 1px;
+    overflow-y : scroll;
+}
+
+div.SendMessage{
+    display: flex;
+    flex-direction : row;
+    border-radius : 5px;
+    border-width : 2px;
+    border-style: solid;
+    border-color : #DCDCDC;
+    height : 5%;
+    margin-top : 5%;
+}
+
+input.MessageBox{
+    margin: auto;
+    width : 80%;
+    height : 50%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size : 15px;
+}
+
+div.SendButton{
+    height : 50%;
+    margin : auto;
+}
+
+div.Message{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size : 15px;
+    text-align : left;
+    word-wrap: break-word;
+    height : auto;
+}

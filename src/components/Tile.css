@@ -1,6 +1,6 @@
 div.boardTile{
     width : 5%;
-    height : 50px;
+    height : 100%;
     border-color : white;
     border-width:  1px;
     border-style: solid;
@@ -10,8 +10,8 @@ div.boardTile{
 }
 
 div.slateTile{
-    width : 25%;
-    height : 50px;
+    width : 35%;
+    height : 6%;
     border-color : white;
     border-width:  1px;
     border-style: solid;
@@ -20,8 +20,8 @@ div.slateTile{
     margin-left : auto;
     margin-right : auto;
     display : flex;
-    justify-content: center;
     flex-direction: column;
+    justify-content: center;
 }
 
 div.highlighted{
