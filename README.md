@@ -11,12 +11,12 @@ npm start
 ### Scrabble 
 
 ## V1 - Basic Scrabble board
- - [ ] Interactive scrabble board
- - [ ] Board maker (placing TL, DL, TW, DW on positions to make scrabble board)
- - [ ] Drag and drop from holder to board, repositioning of letter on board
+ - [X] Interactive scrabble board
+ - [X] Board maker (placing TL, DL, TW, DW on positions to make scrabble board)
+ - [X] Drag and drop from holder to board, repositioning of letter on board
  - [ ] Add game rules
  - [ ] Add backend to facilitate 2 player game
- - [ ] Add in-game chat
+ - [X] Add in-game chat
 
 ## V2 - Rooms
 - [ ] Extend backend for 2-6 players in the same game
