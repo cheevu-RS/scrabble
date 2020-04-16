@@ -1,0 +1,30 @@
+div.Room{
+    text-align: center;
+    width : 60%;
+    margin : auto;
+    display : flex;
+    flex-direction: column;
+    height : 40%;
+}
+
+div.Input{
+    height : 10%;
+    width : 100%;
+    margin : auto;
+    display : flex;
+    flex-direction: row;
+}
+
+input{
+    width : 40%;
+    margin : auto;
+}
+
+button{
+    width : 40%;
+    margin : auto;
+}
+
+span.hiddenText{
+    color: red;
+}

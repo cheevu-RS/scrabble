@@ -4,7 +4,9 @@ import { setUsername } from './../redux/actions'
 import './Username.css'
 
 let mapStateToProps = (state, props) => {
-    return {}
+    return {
+        room : state.userState.room
+    }
 }
 
 let mapDispatchToProps = {
@@ -17,7 +19,6 @@ class Username extends React.Component {
         this.state = {
             username: ""
         }
-        this.usernameRef = React.createRef()
     }
 
     onKeyDown = (event) => {
@@ -32,9 +33,9 @@ class Username extends React.Component {
         this.props.setUsername(this.state.username)
     }
 
-    handleChange = (text) => {
+    handleChange = (event) => {
         this.setState({
-            username: this.usernameRef.current.value
+            username: event.target.value
         })
     }
 

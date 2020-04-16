@@ -1,16 +1,24 @@
 import React from 'react';
 import { SendOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
-import io from 'socket.io-client';
 import './Chatbox.css'
 
 // Creating a message for the chatbox
 function createText(message) {
-    return (
-        <div className="Message" key={message.id}>
-            <strong> {message.user} </strong> : <span> {message.text} </span>
-        </div>
-    )
+    // User has entered the chat
+    if (message.text === "") {
+        return (
+            <div className="Message" key={message.id}>
+                <strong> {message.user} </strong>
+            </div>
+        )
+    } else {
+        return (
+            <div className="Message" key={message.id}>
+                <strong> {message.user} </strong> : <span> {message.text} </span>
+            </div>
+        )
+    }
 }
 
 let mapStateToProps = (state) => {
@@ -29,22 +37,33 @@ class Chatbox extends React.Component {
         this.messageDiv = React.createRef()
     }
 
-    socket = io("localhost:8000")
-
     componentDidMount = () => {
         // Adding the user to the chat
-        this.socket.emit('addUser', {
-            username : this.props.username,
-            room : this.props.room
+        this.props.socket.emit('addUser', {
+            username: this.props.username,
+            room: this.props.room
         })
 
         // Listening for other users to join the chat
-        this.socket.on('addUser', (userData) => {
-            console.log("User with data ", userData, " has entered the chat")
+        this.props.socket.on('addUser', (userData) => {
+            let newUserData = {
+                username: userData.username + " has joined the chat",
+                message: ""
+            }
+            this.addMessage(newUserData, true)
+        })
+
+        // Listening for users who leave the chat
+        this.props.socket.on('removeUser', (userData) => {
+            let newUserData = {
+                username: userData.username + " has left the chat",
+                message: ""
+            }
+            this.addMessage(newUserData, true)
         })
 
         // Listening for messages on the chat
-        this.socket.on('chat', (messageData) => {
+        this.props.socket.on('chat', (messageData) => {
             this.addMessage(messageData, true)
         })
     }
@@ -94,9 +113,10 @@ class Chatbox extends React.Component {
             }, false)
 
             // Pushing the message to all other users
-            this.socket.emit('chat', {
-                username : this.props.username, 
-                message : this.state.message
+            this.props.socket.emit('chat', {
+                username: this.props.username,
+                message: this.state.message,
+                room : this.props.room
             })
         }
     }

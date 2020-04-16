@@ -1,6 +1,6 @@
 import { createStore } from 'redux'
 
-import { SELECT_TILE, DESELECT_TILE, TRANSFER_LETTER, SET_USERNAME } from './actions';
+import { SELECT_TILE, DESELECT_TILE, TRANSFER_LETTER, SET_USERNAME, SET_ROOMNAME } from './actions';
 
 // Creating the initial state
 let createInitialState = () => {
@@ -168,8 +168,13 @@ let reducer = (state = initialState, action) => {
       // Deselecting the selected letter
       newState.gameState.selectedTile = null
       break
+
     case SET_USERNAME:
       newState.userState.username = action.username
+      break
+
+    case SET_ROOMNAME:
+      newState.userState.room = action.roomname
       break
   }
 
