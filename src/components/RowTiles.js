@@ -7,7 +7,7 @@ import './RowTiles.css';
 // Mapping the state to props
 let mapStateToProps = (state, props) => {
     let row = props.row
-    let letters = state.boardTiles[row]
+    let letters = state.gameState.boardTiles[row]
     return {
         letters : letters
     }

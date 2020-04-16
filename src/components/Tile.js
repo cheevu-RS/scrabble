@@ -9,13 +9,13 @@ let mapStateToProps = (state, props) => {
         let row = props.row
         let col = props.col
         return {
-            tile : state.boardTiles[row][col],
-            multiplier : state.multipliers[row][col]
+            tile : state.gameState.boardTiles[row][col],
+            multiplier : state.gameState.multipliers[row][col]
         }
     } else {
         let index = props.col
         return {
-            tile : state.slateTiles[index]
+            tile : state.gameState.slateTiles[index]
         }
     }
 }

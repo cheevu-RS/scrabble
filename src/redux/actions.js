@@ -1,6 +1,7 @@
 export const TRANSFER_LETTER = "TRANSFER_LETTER"
 export const SELECT_TILE = "SELECT_TILE"
 export const DESELECT_TILE = "DESELECT_TILE"
+export const SET_USERNAME = "SET_USERNAME"
 
 // Action dispatcher
 export const selectTile = (tile) => {
@@ -32,5 +33,12 @@ export const transferLetter = (tile) => {
     return {
         type : TRANSFER_LETTER,
         position : tile.position
+    }
+}
+
+export const setUsername = (username) => {
+    return{
+        type : SET_USERNAME,
+        username : username
     }
 }

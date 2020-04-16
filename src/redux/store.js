@@ -1,11 +1,10 @@
 import { createStore } from 'redux'
 
-import { SELECT_TILE, DESELECT_TILE, TRANSFER_LETTER } from './actions';
+import { SELECT_TILE, DESELECT_TILE, TRANSFER_LETTER, SET_USERNAME } from './actions';
 
 // Creating the initial state
 let createInitialState = () => {
   // Creating the board state
-  let state = {}
   const height = 15
   const width = 15
 
@@ -28,32 +27,32 @@ let createInitialState = () => {
   // Initializing all the multipliers
   // NOTE : Format used here is [word, letter]
   let multiplierArray = [
-    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1] ],
-    [[1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1] ],
-    [[1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1] ],
-    [[1, 2], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 2] ],
-    [[1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1] ],
-    [[1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1] ],
-    [[1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1] ],
-    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [3, 1] ],
-    [[1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1] ],
-    [[1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1] ],
-    [[1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1] ],
-    [[1, 2], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 2] ],
-    [[1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1] ],
-    [[1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1] ],
-    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [3, 1] ]
+    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1]],
+    [[1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1]],
+    [[1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1]],
+    [[1, 2], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 2]],
+    [[1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1]],
+    [[1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1]],
+    [[1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1]],
+    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [3, 1]],
+    [[1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1]],
+    [[1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1]],
+    [[1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1]],
+    [[1, 2], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 2]],
+    [[1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1]],
+    [[1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1]],
+    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [3, 1]]
   ]
 
   // Mapping the above array to a list of objects
   let multipliers = Array(height)
 
-  for(let row = 0; row < height; ++row){
+  for (let row = 0; row < height; ++row) {
     multipliers[row] = Array(width)
-    for(let col = 0; col < width; ++col){
+    for (let col = 0; col < width; ++col) {
       multipliers[row][col] = {
-        word : multiplierArray[row][col][0],
-        letter : multiplierArray[row][col][1]
+        word: multiplierArray[row][col][0],
+        letter: multiplierArray[row][col][1]
       }
     }
   }
@@ -71,7 +70,7 @@ let createInitialState = () => {
     slateTiles.push(slateTile)
   }
 
-  state = {
+  let gameState = {
     boardHeight: height,
     boardWidth: width,
     boardTiles: boardTiles,
@@ -79,7 +78,17 @@ let createInitialState = () => {
     slateTiles: slateTiles,
     slateSize: slateSize,
     selectedTile: null,
-    score : 0
+    score: 0
+  }
+
+  let userState = {
+    username: "",
+    room: ""
+  }
+
+  let state = {
+    gameState: gameState,
+    userState: userState
   }
 
   return state
@@ -90,7 +99,7 @@ const initialState = createInitialState()
 let reducer = (state = initialState, action) => {
   // Making a deep copy of the state
   let newState = JSON.parse(JSON.stringify(state))
-  let selectedTile = newState.selectedTile
+  let selectedTile = newState.gameState.selectedTile
 
   switch (action.type) {
     case SELECT_TILE:
@@ -102,7 +111,7 @@ let reducer = (state = initialState, action) => {
         overValidTarget: false
       }
 
-      newState.selectedTile = selectedTile
+      newState.gameState.selectedTile = selectedTile
       break
 
     case DESELECT_TILE:
@@ -115,8 +124,8 @@ let reducer = (state = initialState, action) => {
           let selectedLetter = selectedTile.letter
           let row = selectedTile.position.row
           let col = selectedTile.position.col
-          newState.boardTiles[row][col].letter = ' '
-          newState.boardTiles[row][col].draggable = false
+          newState.gameState.boardTiles[row][col].letter = ' '
+          newState.gameState.boardTiles[row][col].draggable = false
 
           // Inserting the letter into the slate
           let slateTiles = newState.slateTiles
@@ -127,7 +136,7 @@ let reducer = (state = initialState, action) => {
             }
           }
         }
-        newState.selectedTile = null
+        newState.gameState.selectedTile = null
       }
       break
 
@@ -140,7 +149,7 @@ let reducer = (state = initialState, action) => {
       if (selectedTile.boardTile) {
         let row = sourcePosition.row
         let col = sourcePosition.col
-        let boardTile = newState.boardTiles[row][col]
+        let boardTile = newState.gameState.boardTiles[row][col]
         boardTile.letter = ' '
         boardTile.draggable = false
       } else {
@@ -152,12 +161,15 @@ let reducer = (state = initialState, action) => {
       // Transferring the letter to the destination
       let row = action.position.row
       let col = action.position.col
-      let destinationTile = newState.boardTiles[row][col]
+      let destinationTile = newState.gameState.boardTiles[row][col]
       destinationTile.letter = sourceLetter
       destinationTile.draggable = true
 
       // Deselecting the selected letter
-      newState.selectedTile = null
+      newState.gameState.selectedTile = null
+      break
+    case SET_USERNAME:
+      newState.userState.username = action.username
       break
   }
 

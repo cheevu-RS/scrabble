@@ -1,5 +1,7 @@
 import React from 'react';
 import { SendOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux';
+import io from 'socket.io-client';
 import './Chatbox.css'
 
 // Creating a message for the chatbox
@@ -9,6 +11,10 @@ function createText(message) {
             <strong> {message.user} </strong> : <span> {message.text} </span>
         </div>
     )
+}
+
+let mapStateToProps = (state) => {
+    return state.userState
 }
 
 class Chatbox extends React.Component {
@@ -23,27 +29,74 @@ class Chatbox extends React.Component {
         this.messageDiv = React.createRef()
     }
 
+    socket = io("localhost:8000")
+
+    componentDidMount = () => {
+        // Adding the user to the chat
+        this.socket.emit('addUser', {
+            username : this.props.username,
+            room : this.props.room
+        })
+
+        // Listening for other users to join the chat
+        this.socket.on('addUser', (userData) => {
+            console.log("User with data ", userData, " has entered the chat")
+        })
+
+        // Listening for messages on the chat
+        this.socket.on('chat', (messageData) => {
+            this.addMessage(messageData, true)
+        })
+    }
+
     componentDidUpdate = () => {
         this.updateScroll()
     }
 
-    addMessage = () => {
-        // If the message is not empty, add the message to the state
-        if (this.state.message !== "") {
-            // Appending the message to message and clearing message
-            let messages = this.state.messages
-            let messageCount = messages.length
-            let message = this.state.message
+    addMessage = (messageData, otherUser) => {
+        // Appending the message to message and clearing message
+        let messages = this.state.messages
+        let messageCount = messages.length
+        let message = messageData.message
+        let username = messageData.username
 
-            messages.push({
-                text: message,
-                user: "The chosen one",
-                id: messageCount + 1
+        // If message from you
+        if (!otherUser) {
+            username = "You"
+        }
+
+        messages.push({
+            text: message,
+            user: username,
+            id: messageCount + 1
+        })
+
+        // In case the message came from another user, then don't clear the user message
+        if (otherUser) {
+            this.setState({
+                messages: messages,
             })
-
+        } else {
             this.setState({
                 messages: messages,
                 message: ""
+            })
+        }
+    }
+
+    createMessage = () => {
+        // If the message is not empty, add the message to the state
+        if (this.state.message !== "") {
+            // Adding the message to the current chat
+            this.addMessage({
+                message: this.state.message,
+                username: this.props.username
+            }, false)
+
+            // Pushing the message to all other users
+            this.socket.emit('chat', {
+                username : this.props.username, 
+                message : this.state.message
             })
         }
     }
@@ -63,7 +116,7 @@ class Chatbox extends React.Component {
     onEnter = (event) => {
         // If enter is clicked, the message should be appended to messages
         if (event.keyCode == 13) {
-            this.addMessage()
+            this.createMessage()
         }
     }
 
@@ -79,7 +132,7 @@ class Chatbox extends React.Component {
                 <div className="SendMessage">
                     <input className="MessageBox" type="text" onKeyUp={this.onEnter} value={this.state.message} placeholder=" Type a message " onChange={this.onChange} />
                     <div className="SendButton">
-                        <SendOutlined onClick={this.addMessage} />
+                        <SendOutlined onClick={this.createMessage} />
                     </div>
                 </div>
             </div>
@@ -87,4 +140,4 @@ class Chatbox extends React.Component {
     }
 }
 
-export default Chatbox;
+export default connect(mapStateToProps)(Chatbox);

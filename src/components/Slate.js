@@ -6,7 +6,7 @@ import './Slate.css';
 
 let mapStateToProps = (state) => {
     return {
-        size : state.slateSize
+        size : state.gameState.slateSize
     }
 }
 

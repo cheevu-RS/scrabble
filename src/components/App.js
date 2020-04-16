@@ -3,7 +3,15 @@ import Board from './Board';
 import Slate from './Slate';
 import ScoreBoard from './ScoreBoard';
 import Chatbox from './Chatbox';
+import Username from './Username';
+import { connect } from 'react-redux';
 import './App.css';
+
+let mapStateToProps = (state) => {
+  return {
+    userData : state.userState
+  }
+}
 
 class App extends React.Component {
   constructor(props) {
@@ -11,7 +19,8 @@ class App extends React.Component {
   }
 
   render() {
-    return (
+    let username = this.props.userData.username
+    return (username != "" ? (
       <div className="App">
         <div className="slate">
           <h2> Score </h2>
@@ -28,8 +37,8 @@ class App extends React.Component {
           <Chatbox></Chatbox>
         </div>
       </div>
-    );
+    ) : (<Username />));
   }
 };
 
-export default App;
+export default connect(mapStateToProps)(App);

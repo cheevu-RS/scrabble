@@ -1,0 +1,19 @@
+div.Username{
+    text-align : center;
+    width : 50%;
+    margin : auto;
+    display : flex;
+    flex-direction : column;
+    justify-content: center;
+    height : 20%;
+}
+
+input.InputBox{
+    margin : auto;
+    width : 70%;
+}
+
+button.SubmitButton{
+    margin : auto;
+    width : 50%;
+}

@@ -7,10 +7,10 @@ import RowTiles from './RowTiles';
 // Mapping the global state from redux to props
 let mapStateToProps = (state) => {
     return {
-        width : state.boardWidth,
-        height : state.boardHeight,
-        letters : state.boardLetters,
-        multipliers : state.multipliers
+        width : state.gameState.boardWidth,
+        height : state.gameState.boardHeight,
+        letters : state.gameState.boardLetters,
+        multipliers : state.gameState.multipliers
     }
 }
 
