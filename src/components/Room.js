@@ -27,13 +27,13 @@ class Room extends React.Component {
         let text = event.target.value
         let id = event.target.id
 
-        if(id === "join"){
+        if (id === "join") {
             this.setState({
                 joinRoom: text
             })
-        }else{
+        } else {
             this.setState({
-                createRoom : text
+                createRoom: text
             })
         }
     }
@@ -41,7 +41,7 @@ class Room extends React.Component {
     createRoom = async () => {
         // Checking if the room name is already in use currently
         let room = this.state.createRoom
-        let response = await fetch("http://localhost:" +  env.socketPort + "/roomExists?roomName=" + room)
+        let response = await fetch(env.API_BASE_URL + ":" + env.SOCKET_PORT + "/roomExists?roomName=" + room)
         let exists = await response.json()
 
         // If the room doesn't exist, adding the room
@@ -60,7 +60,7 @@ class Room extends React.Component {
     joinRoom = async () => {
         // Checking if the room exists
         let room = this.state.joinRoom
-        let response = await fetch("http://localhost:" +  env.socketPort + "/roomExists?roomName=" + room)
+        let response = await fetch(env.API_BASE_URL + ":" +  env.SOCKET_PORT + "/roomExists?roomName=" + room)
         let exists = await response.json()
 
         // If the room exists, joining the room

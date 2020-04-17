@@ -21,7 +21,7 @@ class App extends React.Component {
     super(props)
   }
 
-  socket = io("localhost:" +  env.socketPort)
+  socket = io(env.API_BASE_URL + ":" + env.SOCKET_PORT)
 
   render() {
     let username = this.props.userData.username
