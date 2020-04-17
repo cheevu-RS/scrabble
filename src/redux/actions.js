@@ -2,6 +2,7 @@ export const TRANSFER_LETTER = "TRANSFER_LETTER"
 export const SELECT_TILE = "SELECT_TILE"
 export const DESELECT_TILE = "DESELECT_TILE"
 export const SET_USERNAME = "SET_USERNAME"
+export const SET_ROOMNAME = "SET_ROOMNAME"
 
 // Action dispatcher
 export const selectTile = (tile) => {
@@ -40,5 +41,12 @@ export const setUsername = (username) => {
     return{
         type : SET_USERNAME,
         username : username
+    }
+}
+
+export const setRoomname = (roomname) => {
+    return{
+        type : SET_ROOMNAME,
+        roomname : roomname
     }
 }
