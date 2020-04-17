@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { setUsername } from './../redux/actions'
 import './Username.css'
 
-let mapStateToProps = (state, props) => {
+let mapStateToProps = (state) => {
     return {
         room : state.userState.room
     }

@@ -153,7 +153,7 @@ let reducer = (state = initialState, action) => {
         boardTile.letter = ' '
         boardTile.draggable = false
       } else {
-        let slateTile = newState.slateTiles[sourcePosition]
+        let slateTile = newState.gameState.slateTiles[sourcePosition]
         slateTile.letter = ' '
         slateTile.draggable = false
       }

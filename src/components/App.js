@@ -5,6 +5,7 @@ import ScoreBoard from './ScoreBoard';
 import Chatbox from './Chatbox';
 import Room from './Room';
 import Username from './Username';
+import env from './../utils/env'
 import { connect } from 'react-redux';
 import io from 'socket.io-client';
 import './App.css';
@@ -20,7 +21,7 @@ class App extends React.Component {
     super(props)
   }
 
-  socket = io("localhost:8000")
+  socket = io("localhost:" +  env.socketPort)
 
   render() {
     let username = this.props.userData.username
