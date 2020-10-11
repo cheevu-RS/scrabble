@@ -45,18 +45,18 @@ class Chatbox extends React.Component {
         })
 
         // Listening for other users to join the chat
-        this.props.socket.on('addUser', (userData) => {
+        this.props.socket.on('addUser', (username) => {
             let newUserData = {
-                username: userData.username + " has joined the chat",
+                username: username + " has joined the chat",
                 message: ""
             }
             this.addMessage(newUserData, true)
         })
 
         // Listening for users who leave the chat
-        this.props.socket.on('removeUser', (userData) => {
+        this.props.socket.on('removeUser', (username) => {
             let newUserData = {
-                username: userData.username + " has left the chat",
+                username: username + " has left the chat",
                 message: ""
             }
             this.addMessage(newUserData, true)

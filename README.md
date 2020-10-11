@@ -14,9 +14,11 @@ npm start
  - [X] Interactive scrabble board
  - [X] Board maker (placing TL, DL, TW, DW on positions to make scrabble board)
  - [X] Drag and drop from holder to board, repositioning of letter on board
+ - [X] Add in-game chat
+ - [ ] Add pre game lobby
  - [ ] Add game rules
  - [ ] Add backend to facilitate 2 player game
- - [X] Add in-game chat
+ - [ ] When letters are moved to invalid positions, it resets to slate. Make this more robust (Place tile on the nearest board position)
 
 ## V2 - Rooms
 - [ ] Extend backend for 2-6 players in the same game

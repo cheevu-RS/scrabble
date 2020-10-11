@@ -5,6 +5,7 @@ import ScoreBoard from './ScoreBoard';
 import Chatbox from './Chatbox';
 import Room from './Room';
 import Username from './Username';
+import Pregame from './Pregame';
 import env from './../utils/env'
 import { connect } from 'react-redux';
 import io from 'socket.io-client';
@@ -12,7 +13,8 @@ import './App.css';
 
 let mapStateToProps = (state) => {
   return {
-    userData: state.userState
+    userData: state.userState,
+    gameData : state.gameState
   }
 }
 
@@ -23,14 +25,31 @@ class App extends React.Component {
 
   socket = io(env.API_BASE_URL + ":" + env.SOCKET_PORT)
 
+  checkValid = async() => {
+    // Sending the updated game state
+    const valid = await fetch(env.API_BASE_URL + ":" + env.SOCKET_PORT + "/checkValid", {
+      method : "POST",
+      body : this.props.gameData
+    })
+
+    if(valid){
+      console.log("Valid")
+    }else{
+      console.log("Invalid word")
+    }
+  }
+
   render() {
     let username = this.props.userData.username
     let room = this.props.userData.room
+    let pregame = this.props.gameData.pregame
     if (username === "") {
       return (<Username />);
     } else if (room === "") {
       return (<Room socket={this.socket} />)
-    } else {
+    } else if(pregame) {
+      return (<Pregame socket={this.socket} />)
+    }else{
       return (
         <div className="App">
           <div className="slate">
@@ -42,6 +61,7 @@ class App extends React.Component {
           <div className="board">
             <h2> Board </h2>
             <Board></Board>
+            <button className="confirm" onClick={this.checkValid}> Confirm </button> 
           </div>
           <div className="chat">
             <h2> Chatbox </h2>

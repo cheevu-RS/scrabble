@@ -1,13 +1,14 @@
 import { createStore } from 'redux'
 
-import { SELECT_TILE, DESELECT_TILE, TRANSFER_LETTER, SET_USERNAME, SET_ROOMNAME } from './actions';
+import { SELECT_TILE, DESELECT_TILE, TRANSFER_LETTER, SET_USERNAME, SET_ROOMNAME, START_GAME } from './actions';
 
 // Creating the initial state
 let createInitialState = () => {
   // Creating the board state
   const height = 15
-  const width = 15
-
+  const width  = 15
+  const slateSize = 7
+  
   let boardTiles = Array(height)
 
   for (let row = 0; row < height; ++row) {
@@ -57,9 +58,8 @@ let createInitialState = () => {
     }
   }
 
-  // Creating the slate state
+  // Creating the player state
   let slateTiles = []
-  const slateSize = 7
   for (let count = 0; count < slateSize; ++count) {
     let letter = String.fromCharCode(65 + count)
     let slateTile = {
@@ -78,7 +78,8 @@ let createInitialState = () => {
     slateTiles: slateTiles,
     slateSize: slateSize,
     selectedTile: null,
-    score: 0
+    score: 0,
+    pregame : true
   }
 
   let userState = {
@@ -100,10 +101,10 @@ let reducer = (state = initialState, action) => {
   // Making a deep copy of the state
   let newState = JSON.parse(JSON.stringify(state))
   let selectedTile = newState.gameState.selectedTile
-
+  
   switch (action.type) {
     case SELECT_TILE:
-      // Selecting the letter
+      // Selecting a letter
       selectedTile = {
         boardTile: action.boardTile,
         position: action.position,
@@ -115,8 +116,7 @@ let reducer = (state = initialState, action) => {
       break
 
     case DESELECT_TILE:
-      // Deselect tile if not deselected
-      // NOTE : This means that the tile was not dropped in a valid position
+      // NOTE : This means that a letter was dragged but was not dropped in a valid position
       if (selectedTile) {
         // If this tile is a board tile, this tile must be reset and put in the slate
         if (selectedTile.boardTile) {
@@ -128,7 +128,7 @@ let reducer = (state = initialState, action) => {
           newState.gameState.boardTiles[row][col].draggable = false
 
           // Inserting the letter into the slate
-          let slateTiles = newState.slateTiles
+          let slateTiles = newState.gameState.slateTiles
           for (let tile of slateTiles) {
             if (!tile.letter || tile.letter === ' ') {
               tile.letter = selectedLetter
@@ -175,6 +175,10 @@ let reducer = (state = initialState, action) => {
 
     case SET_ROOMNAME:
       newState.userState.room = action.roomname
+      break
+
+    case START_GAME:
+      newState.gameState.pregame = false
       break
   }
 

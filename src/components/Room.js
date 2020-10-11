@@ -4,8 +4,8 @@ import { setRoomname } from './../redux/actions'
 import env from './../utils/env'
 import './Room.css'
 
-let mapStateToProps = () => {
-    return {}
+let mapStateToProps = (state) => {
+    return {username : state.userState.username}
 }
 
 let mapDispatchToProps = {
@@ -41,15 +41,15 @@ class Room extends React.Component {
     createRoom = async () => {
         // Checking if the room name is already in use currently
         let room = this.state.createRoom
-        let response = await fetch(env.API_BASE_URL + ":" + env.SOCKET_PORT + "/roomExists?roomName=" + room)
+        let response = await fetch(env.API_BASE_URL + ":" + env.SOCKET_PORT + "/roomExists?room=" + room)
         let exists = await response.json()
 
         // If the room doesn't exist, adding the room
         if (!exists) {
             this.props.socket.emit('createRoom', (room))
-
+            
             // Setting this user's room name
-            this.props.setRoomname(this.state.createRoom)
+            this.props.setRoomname(room)
         } else {
             this.setState({
                 createHiddenText: "Room with name " + room + " already exists"
@@ -60,7 +60,7 @@ class Room extends React.Component {
     joinRoom = async () => {
         // Checking if the room exists
         let room = this.state.joinRoom
-        let response = await fetch(env.API_BASE_URL + ":" +  env.SOCKET_PORT + "/roomExists?roomName=" + room)
+        let response = await fetch(env.API_BASE_URL + ":" +  env.SOCKET_PORT + "/roomExists?room=" + room)
         let exists = await response.json()
 
         // If the room exists, joining the room
@@ -95,7 +95,6 @@ class Room extends React.Component {
                     <input id="join" type="text" ref={this.joinRoomRef} value={this.state.joinRoom} onChange={this.onChange} onKeyDown={this.onKeyDownJoin} />
                 </div>
                 <span className="hiddenText">{this.state.joinHiddenText}</span>
-
                 <h1> Create Room </h1>
                 <div className="Input">
                     <button onClick={this.createRoom}> Create Room </button>

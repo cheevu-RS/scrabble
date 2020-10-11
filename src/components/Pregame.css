@@ -1,0 +1,40 @@
+.chatbox{
+    height : 90%;
+    width : 30%;
+    margin : auto;
+}
+
+.display{
+    height : 100%;
+    width : 70%;
+    margin : auto;
+}
+
+.players{
+    height : 85%;
+    margin : auto;
+}
+
+.user{
+    text-align : center;
+    margin : auto;
+    height : auto; 
+}
+
+.pregame {
+    height : 100%;
+    display : flex;
+    flex-direction : row;
+}
+
+.start{
+    height : 12%;
+    margin : auto;
+    display : flex;
+}
+
+h1{
+    text-align : center;
+    margin-top : 3%;
+    margin-bottom : 5%;
+}
