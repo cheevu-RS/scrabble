@@ -1,14 +1,17 @@
-### Setup
-```
-npm install
-```
+# Scrabble 
+The famous word game - [Scrabble](https://en.wikipedia.org/wiki/Scrabble)!
 
-### Starting server
-```
-npm start
-```
+Backend -> [repository](https://github.com/hrishikeshshekhar/scrabble-backend)
 
-### Scrabble 
+### Motivation
+I was hooked to scrabble for a while during the quarantine and wanted to make a bot to find the optimal word that can be placed at every stage. 
+This, combined with the lack of a free online place (that is pleasing to the eye) to play scrabble online with your friends led me to start working on this project.
+
+### Tech Stack
+Frontend - React, Redux      
+Backend - NodeJS
+
+### Objectives
 
 ## V1 - Basic Scrabble board
  - [X] Interactive scrabble board
@@ -23,12 +26,21 @@ npm start
 - [ ] Create rooms and extend chat to whole room
 
 ## V2.5 - Add responsiveness
-- [ ] Make it look good across all devices
-- [ ] Beautify everything xD
+- [ ] Responsive UI
+- [ ] Add joyride
 
 ## V3 - Game bot
 - [ ] Make brute force bot
 - [ ] Make efficient bot using tries
 - [ ] Compare
 - [ ] Add as feature for people playing
-- [ ] Add joyride
+
+### Setup 
+```
+npm install
+```
+
+### Starting server
+```
+npm start
+```
