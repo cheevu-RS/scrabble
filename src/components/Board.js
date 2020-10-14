@@ -1,16 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import {boardHeight, boardWidth, multipliers} from '../utils/constants'
 import './Board.css';
 import RowTiles from './RowTiles';
 
 // Mapping the global state from redux to props
 let mapStateToProps = (state) => {
     return {
-        width : state.gameState.boardWidth,
-        height : state.gameState.boardHeight,
-        letters : state.gameState.boardLetters,
-        multipliers : state.gameState.multipliers
+        letters : state.gameState.boardLetters
     }
 }
 
@@ -22,7 +20,7 @@ class Board extends React.Component {
     render() {
         // Creating tiles for adding to the board    
         // Putting each row in a div and making the div an inline block div 
-        let height = this.props.height
+        let height = boardHeight;
 
         let rows = []
 

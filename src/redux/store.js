@@ -1,19 +1,17 @@
 import { createStore } from 'redux'
 
-import { SELECT_TILE, DESELECT_TILE, TRANSFER_LETTER, SET_USERNAME, SET_ROOMNAME } from './actions';
+import { SELECT_TILE, DESELECT_TILE, TRANSFER_LETTER, SET_USERNAME, SET_ROOMNAME, SET_GAMESTATE } from './actions';
 
+import {boardHeight, boardWidth, slateSize} from '../utils/constants'
 // Creating the initial state
 let createInitialState = () => {
   // Creating the board state
-  const height = 15
-  const width = 15
+  let boardTiles = Array(boardHeight)
 
-  let boardTiles = Array(height)
+  for (let row = 0; row < boardHeight; ++row) {
+    boardTiles[row] = Array(boardWidth)
 
-  for (let row = 0; row < height; ++row) {
-    boardTiles[row] = Array(width)
-
-    for (let col = 0; col < width; ++col) {
+    for (let col = 0; col < boardWidth; ++col) {
       // Initializing the board with empty characters
       let boardTile = {
         letter: ' ',
@@ -23,72 +21,32 @@ let createInitialState = () => {
       boardTiles[row][col] = boardTile;
     }
   }
-
-  // Initializing all the multipliers
-  // NOTE : Format used here is [word, letter]
-  let multiplierArray = [
-    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1]],
-    [[1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1]],
-    [[1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1]],
-    [[1, 2], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 2]],
-    [[1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1]],
-    [[1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1]],
-    [[1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1]],
-    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [3, 1]],
-    [[1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1]],
-    [[1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1]],
-    [[1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 1]],
-    [[1, 2], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 2]],
-    [[1, 1], [1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1], [1, 1]],
-    [[1, 1], [2, 1], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [1, 3], [1, 1], [1, 1], [1, 1], [2, 1], [1, 1]],
-    [[3, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [1, 1], [3, 1], [1, 1], [1, 1], [1, 1], [1, 2], [1, 1], [1, 1], [3, 1]]
-  ]
-
-  // Mapping the above array to a list of objects
-  let multipliers = Array(height)
-
-  for (let row = 0; row < height; ++row) {
-    multipliers[row] = Array(width)
-    for (let col = 0; col < width; ++col) {
-      multipliers[row][col] = {
-        word: multiplierArray[row][col][0],
-        letter: multiplierArray[row][col][1]
-      }
-    }
-  }
-
-  // Creating the slate state
   let slateTiles = []
-  const slateSize = 7
   for (let count = 0; count < slateSize; ++count) {
     let letter = String.fromCharCode(65 + count)
     let slateTile = {
-      letter: letter,
-      draggable: true,
-      overValidTarget: false
+        letter: letter,
+        draggable: true,
+        overValidTarget: false
     }
     slateTiles.push(slateTile)
-  }
-
+}
+ 
   let gameState = {
-    boardHeight: height,
-    boardWidth: width,
     boardTiles: boardTiles,
-    multipliers: multipliers,
     slateTiles: slateTiles,
-    slateSize: slateSize,
     selectedTile: null,
-    score: 0
   }
-
+  
   let userState = {
     username: "",
-    room: ""
+    room: "",
+    score: 0
   }
 
   let state = {
     gameState: gameState,
-    userState: userState
+    userState: userState,
   }
 
   return state
@@ -128,7 +86,7 @@ let reducer = (state = initialState, action) => {
           newState.gameState.boardTiles[row][col].draggable = false
 
           // Inserting the letter into the slate
-          let slateTiles = newState.slateTiles
+          let slateTiles = newState.gameState.slateTiles
           for (let tile of slateTiles) {
             if (!tile.letter || tile.letter === ' ') {
               tile.letter = selectedLetter

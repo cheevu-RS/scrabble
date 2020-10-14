@@ -3,14 +3,13 @@ import { connect } from 'react-redux';
 import { selectTile, deselectTile, transferLetter } from '../redux/actions';
 
 import './Tile.css';
-
+import {multipliers} from '../utils/constants'
 let mapStateToProps = (state, props) => {
     if (props.boardTile) {
         let row = props.row
         let col = props.col
         return {
             tile : state.gameState.boardTiles[row][col],
-            multiplier : state.gameState.multipliers[row][col]
         }
     } else {
         let index = props.col
@@ -104,20 +103,22 @@ class Tile extends React.Component {
                 className += "highlighted"
             }
             
+            let multiplier = multipliers[this.props.row][this.props.col];
+  
             // If the tile is occupied, then forcing the CSS class to the class
             if(this.props.tile.letter != " "){
                 className += " occupied"
             }else{
-                if(this.props.multiplier.word === 2){
+                if(multiplier.word === 2){
                     className += " doubleWord"
                     text = " DOUBLE WORD"
-                }else if(this.props.multiplier.word === 3){
+                }else if(multiplier.word === 3){
                     className += " tripleWord"
                     text = " TRIPLE WORD"
-                }else if(this.props.multiplier.letter === 2){
+                }else if(multiplier.letter === 2){
                     className += " doubleLetter"
                     text = " DOUBLE LETTER"
-                }else if(this.props.multiplier.letter === 3){
+                }else if(multiplier.letter === 3){
                     className += " tripleLetter"
                     text = " TRIPLE LETTER"
                 }else{

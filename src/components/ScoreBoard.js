@@ -4,7 +4,7 @@ import './ScoreBoard.css'
 
 let mapStateToProps = (state) => {
     return {
-        score: state.gameState.score
+        score: state.userState.score
     }
 }
 

@@ -3,11 +3,9 @@ import { connect } from 'react-redux';
 
 import Tile from './Tile';
 import './Slate.css';
-
+import {slateSize} from '../utils/constants'
 let mapStateToProps = (state) => {
-    return {
-        size : state.gameState.slateSize
-    }
+    return {}
 }
 
 class Slate extends React.Component{
@@ -19,7 +17,7 @@ class Slate extends React.Component{
         let tiles = []
 
         // Creating tiles within the slate
-        for(let index = 0; index < this.props.size; ++index){
+        for(let index = 0; index < slateSize; ++index){
             let tile = <Tile col={index} key = {index + 1} boardTile={false}></Tile>;
             tiles.push(tile)
         }
