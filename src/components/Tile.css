@@ -10,8 +10,8 @@ div.boardTile{
 }
 
 div.slateTile{
-    width : 35%;
-    height : 6%;
+    width : 50%;
+    height : 10%;
     border-color : white;
     border-width:  1px;
     border-style: solid;
