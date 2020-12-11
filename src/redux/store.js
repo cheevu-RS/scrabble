@@ -1,144 +1,154 @@
 import { createStore } from 'redux'
 
-import { SELECT_TILE, DESELECT_TILE, TRANSFER_LETTER, SET_USERNAME, SET_ROOMNAME, SET_GAMESTATE } from './actions';
+import {
+    SELECT_TILE,
+    DESELECT_TILE,
+    TRANSFER_LETTER,
+    SET_USERNAME,
+    SET_ROOMNAME,
+} from './actions'
 
-import {boardHeight, boardWidth, slateSize} from '../utils/constants'
+import { boardHeight, boardWidth, slateSize } from '../utils/constants'
 // Creating the initial state
-let createInitialState = () => {
-  // Creating the board state
-  let boardTiles = Array(boardHeight)
+const createInitialState = () => {
+    // Creating the board state
+    const boardTiles = Array(boardHeight)
 
-  for (let row = 0; row < boardHeight; ++row) {
-    boardTiles[row] = Array(boardWidth)
+    for (let row = 0; row < boardHeight; row += 1) {
+        boardTiles[row] = Array(boardWidth)
 
-    for (let col = 0; col < boardWidth; ++col) {
-      // Initializing the board with empty characters
-      let boardTile = {
-        letter: ' ',
-        draggable: false,
-        overValidTarget: false
-      }
-      boardTiles[row][col] = boardTile;
+        for (let col = 0; col < boardWidth; col += 1) {
+            // Initializing the board with empty characters
+            const boardTile = {
+                letter: ' ',
+                draggable: false,
+                overValidTarget: false,
+            }
+            boardTiles[row][col] = boardTile
+        }
     }
-  }
-  let slateTiles = []
-  for (let count = 0; count < slateSize; ++count) {
-    let letter = String.fromCharCode(65 + count)
-    let slateTile = {
-        letter: letter,
-        draggable: true,
-        overValidTarget: false
+    const slateTiles = []
+    for (let count = 0; count < slateSize; count += 1) {
+        const letter = String.fromCharCode(65 + count)
+        const slateTile = {
+            letter,
+            draggable: true,
+            overValidTarget: false,
+        }
+        slateTiles.push(slateTile)
     }
-    slateTiles.push(slateTile)
-}
- 
-  let gameState = {
-    boardTiles: boardTiles,
-    slateTiles: slateTiles,
-    selectedTile: null,
-  }
-  
-  let userState = {
-    username: "",
-    room: "",
-    score: 0
-  }
 
-  let state = {
-    gameState: gameState,
-    userState: userState,
-  }
+    const gameState = {
+        boardTiles,
+        slateTiles,
+        selectedTile: null,
+    }
 
-  return state
+    const userState = {
+        username: '',
+        room: '',
+        score: 0,
+    }
+
+    const state = {
+        gameState,
+        userState,
+    }
+
+    return state
 }
 
 const initialState = createInitialState()
 
-let reducer = (state = initialState, action) => {
-  // Making a deep copy of the state
-  let newState = JSON.parse(JSON.stringify(state))
-  let selectedTile = newState.gameState.selectedTile
+const reducer = (state = initialState, action) => {
+    // Making a deep copy of the state
+    const newState = JSON.parse(JSON.stringify(state))
+    let { selectedTile } = newState.gameState
 
-  switch (action.type) {
-    case SELECT_TILE:
-      // Selecting the letter
-      selectedTile = {
-        boardTile: action.boardTile,
-        position: action.position,
-        letter: action.letter,
-        overValidTarget: false
-      }
-
-      newState.gameState.selectedTile = selectedTile
-      break
-
-    case DESELECT_TILE:
-      // Deselect tile if not deselected
-      // NOTE : This means that the tile was not dropped in a valid position
-      if (selectedTile) {
-        // If this tile is a board tile, this tile must be reset and put in the slate
-        if (selectedTile.boardTile) {
-          // Copying the letter from the selected tile and resetting selected tile
-          let selectedLetter = selectedTile.letter
-          let row = selectedTile.position.row
-          let col = selectedTile.position.col
-          newState.gameState.boardTiles[row][col].letter = ' '
-          newState.gameState.boardTiles[row][col].draggable = false
-
-          // Inserting the letter into the slate
-          let slateTiles = newState.gameState.slateTiles
-          for (let tile of slateTiles) {
-            if (!tile.letter || tile.letter === ' ') {
-              tile.letter = selectedLetter
-              break
+    switch (action.type) {
+        case SELECT_TILE: {
+            // Selecting the letter
+            selectedTile = {
+                boardTile: action.boardTile,
+                position: action.position,
+                letter: action.letter,
+                overValidTarget: false,
             }
-          }
+
+            newState.gameState.selectedTile = selectedTile
+            break
         }
-        newState.gameState.selectedTile = null
-      }
-      break
+        case DESELECT_TILE: {
+            // Deselect tile if not deselected
+            // NOTE : This means that the tile was not dropped in a valid position
+            if (selectedTile) {
+                // If this tile is a board tile, this tile must be reset and put in the slate
+                if (selectedTile.boardTile) {
+                    // Copying the letter from the selected tile and resetting selected tile
+                    const selectedLetter = selectedTile.letter
+                    const { row } = selectedTile.position
+                    const { col } = selectedTile.position
+                    newState.gameState.boardTiles[row][col].letter = ' '
+                    newState.gameState.boardTiles[row][col].draggable = false
 
-    case TRANSFER_LETTER:
-      // Saving the source letter
-      let sourceLetter = selectedTile.letter
+                    // Inserting the letter into the slate
+                    const { slateTiles } = newState.gameState
+                    slateTiles.every((tile) => {
+                        if (!tile.letter || tile.letter === ' ') {
+                            // eslint-disable-next-line no-param-reassign
+                            tile.letter = selectedLetter
+                            return false
+                        }
+                        return true
+                    })
+                }
+                newState.gameState.selectedTile = null
+            }
+            break
+        }
+        case TRANSFER_LETTER: {
+            // Saving the source letter
+            const sourceLetter = selectedTile.letter
 
-      // Erasing letter from source tile
-      let sourcePosition = selectedTile.position
-      if (selectedTile.boardTile) {
-        let row = sourcePosition.row
-        let col = sourcePosition.col
-        let boardTile = newState.gameState.boardTiles[row][col]
-        boardTile.letter = ' '
-        boardTile.draggable = false
-      } else {
-        let slateTile = newState.gameState.slateTiles[sourcePosition]
-        slateTile.letter = ' '
-        slateTile.draggable = false
-      }
+            // Erasing letter from source tile
+            const sourcePosition = selectedTile.position
+            if (selectedTile.boardTile) {
+                const { row } = sourcePosition
+                const { col } = sourcePosition
+                const boardTile = newState.gameState.boardTiles[row][col]
+                boardTile.letter = ' '
+                boardTile.draggable = false
+            } else {
+                const slateTile = newState.gameState.slateTiles[sourcePosition]
+                slateTile.letter = ' '
+                slateTile.draggable = false
+            }
 
-      // Transferring the letter to the destination
-      let row = action.position.row
-      let col = action.position.col
-      let destinationTile = newState.gameState.boardTiles[row][col]
-      destinationTile.letter = sourceLetter
-      destinationTile.draggable = true
+            // Transferring the letter to the destination
+            const { row } = action.position
+            const { col } = action.position
+            const destinationTile = newState.gameState.boardTiles[row][col]
+            destinationTile.letter = sourceLetter
+            destinationTile.draggable = true
 
-      // Deselecting the selected letter
-      newState.gameState.selectedTile = null
-      break
+            // Deselecting the selected letter
+            newState.gameState.selectedTile = null
+            break
+        }
+        case SET_USERNAME: {
+            newState.userState.username = action.username
+            break
+        }
+        case SET_ROOMNAME: {
+            newState.userState.room = action.roomname
+            break
+        }
+        default:
+    }
 
-    case SET_USERNAME:
-      newState.userState.username = action.username
-      break
-
-    case SET_ROOMNAME:
-      newState.userState.room = action.roomname
-      break
-  }
-
-  return newState
+    return newState
 }
 
 const store = createStore(reducer)
 
-export default store;
+export default store
