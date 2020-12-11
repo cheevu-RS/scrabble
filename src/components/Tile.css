@@ -1,61 +1,61 @@
-div.boardTile{
-    width : 5%;
-    height : 100%;
-    border-color : white;
-    border-width:  1px;
+div.boardTile {
+    width: 5%;
+    height: 100%;
+    border-color: white;
+    border-width: 1px;
     border-style: solid;
-    display : flex;
+    display: flex;
     justify-content: center;
     flex-direction: column;
 }
 
-div.slateTile{
-    width : 35%;
-    height : 6%;
-    border-color : white;
-    border-width:  1px;
+div.slateTile {
+    width: 50%;
+    height: 10%;
+    border-color: white;
+    border-width: 1px;
     border-style: solid;
-    background-color : #FFFACD;
-    text-align : center;
-    margin-left : auto;
-    margin-right : auto;
-    display : flex;
+    background-color: #fffacd;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-div.highlighted{
-    background-color : #FFFACD !important;
+div.highlighted {
+    background-color: #fffacd !important;
 }
 
-div.occupied{
-    background-color : #FFFACD !important;
+div.occupied {
+    background-color: #fffacd !important;
 }
 
-div.doubleLetter{
-    background-color : #87CEFA;
+div.doubleLetter {
+    background-color: #87cefa;
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size : 11px;
+    font-size: 11px;
 }
 
-div.doubleWord{
-    background-color : 	#F6A192;
+div.doubleWord {
+    background-color: #f6a192;
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size : 11px;
+    font-size: 11px;
 }
 
-div.tripleLetter{
-    background-color : #4682B4;
+div.tripleLetter {
+    background-color: #4682b4;
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size : 11px;
+    font-size: 11px;
 }
 
-div.tripleWord{
-    background-color : #FF4500;
+div.tripleWord {
+    background-color: #ff4500;
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size : 11px;
+    font-size: 11px;
 }
 
-div.letter{
-    background-color : #00CCAA;
+div.letter {
+    background-color: #00ccaa;
 }

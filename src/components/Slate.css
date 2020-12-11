@@ -1,11 +1,13 @@
-html, body, div {
+html,
+body,
+div {
     height: 100%;
     padding: 0;
     margin: 0;
-}  
+}
 
-div.Slate{
-    display : flex;
-    flex-direction : column;
-    height : 80%;
+div.Slate {
+    display: flex;
+    flex-direction: column;
+    height: 60%;
 }

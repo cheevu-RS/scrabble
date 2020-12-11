@@ -9,6 +9,7 @@ import Chatbox from './Chatbox'
 import Room from './Room'
 import Username from './Username'
 import env from '../utils/env'
+import Rules from './Rules'
 import './App.css'
 
 const mapStateToProps = (state) => {
@@ -20,33 +21,77 @@ const mapStateToProps = (state) => {
 class App extends React.Component {
     socket = io(`${env.API_BASE_URL}:${env.SOCKET_PORT}`)
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            isBoardVisible: true,
+            isRulesVisible: false,
+        }
+    }
+
+    toggleGameRules = () => {
+        this.setState((prevState) => ({
+            isBoardVisible: !prevState.isBoardVisible,
+            isRulesVisible: !prevState.isRulesVisible,
+        }))
+    }
+
+    // eslint-disable-next-line consistent-return
     render() {
         const { userData } = this.props
         const { username, room } = userData
+        const { isBoardVisible, isRulesVisible } = this.state
         if (username === '') {
             return <Username />
         }
         if (room === '') {
             return <Room socket={this.socket} />
         }
-        return (
-            <div className="App">
-                <div className="slate">
-                    <h2> Score </h2>
-                    <ScoreBoard />
-                    <h2> Letters </h2>
-                    <Slate />
+        if (isBoardVisible) {
+            return (
+                <div className="App">
+                    <div className="slate">
+                        <h2> Score </h2>
+                        <ScoreBoard />
+                        <h2> Letters </h2>
+                        <Slate />
+                        <button
+                            type="button"
+                            value="Rules"
+                            onClick={this.toggleGameRules}
+                        >
+                            {' '}
+                            See Game Rules{' '}
+                        </button>
+                    </div>
+                    <div className="board">
+                        <h2> Board </h2>
+                        <Board />
+                    </div>
+                    <div className="chat">
+                        <h2> Chatbox </h2>
+                        <Chatbox socket={this.socket} />
+                    </div>
                 </div>
-                <div className="board">
-                    <h2> Board </h2>
-                    <Board />
+            )
+        }
+        if (isRulesVisible) {
+            return (
+                <div className="rules">
+                    <Rules />
+                    <div className="Btn-div">
+                        <button
+                            type="button"
+                            className="back"
+                            onClick={this.toggleGameRules}
+                        >
+                            {' '}
+                            Show Board{' '}
+                        </button>
+                    </div>
                 </div>
-                <div className="chat">
-                    <h2> Chatbox </h2>
-                    <Chatbox socket={this.socket} />
-                </div>
-            </div>
-        )
+            )
+        }
     }
 }
 App.propTypes = {

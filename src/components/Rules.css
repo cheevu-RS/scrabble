@@ -1,0 +1,7 @@
+.Heading {
+    display: flex;
+    justify-content: center;
+}
+.rules {
+    padding: 0 30px;
+}
