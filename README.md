@@ -17,7 +17,7 @@ Backend - NodeJS
  - [X] Interactive scrabble board
  - [X] Board maker (placing TL, DL, TW, DW on positions to make scrabble board)
  - [X] Drag and drop from holder to board, repositioning of letter on board
- - [ ] Add game rules
+ - [X] Add game rules
  - [ ] Add backend to facilitate 2 player game
  - [X] Add in-game chat
 
