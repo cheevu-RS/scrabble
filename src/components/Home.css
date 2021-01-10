@@ -1,0 +1,14 @@
+.title-container-col {
+    height: 15%;
+}
+.body-container-col {
+    height: 85%;
+    padding-top: 1%;
+}
+.card-container {
+    justify-content: space-evenly;
+}
+.title {
+    padding-top: 1.5%;
+    color: white !important;
+}

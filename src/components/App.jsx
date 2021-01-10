@@ -2,12 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import io from 'socket.io-client'
 import PropTypes from 'prop-types'
+import Home from './Home'
 import Board from './Board'
 import Slate from './Slate'
 import ScoreBoard from './ScoreBoard'
 import Chatbox from './Chatbox'
-import Room from './Room'
-import Username from './Username'
 import env from '../utils/env'
 import Rules from './Rules'
 import './App.css'
@@ -41,11 +40,8 @@ class App extends React.Component {
         const { userData } = this.props
         const { username, room } = userData
         const { isBoardVisible, isRulesVisible } = this.state
-        if (username === '') {
-            return <Username />
-        }
-        if (room === '') {
-            return <Room socket={this.socket} />
+        if (username === '' || room === '') {
+            return <Home />
         }
         if (isBoardVisible) {
             return (
