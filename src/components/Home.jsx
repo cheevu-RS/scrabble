@@ -96,70 +96,82 @@ class Home extends React.Component {
                 <Col span={24} className="body-container-col">
                     <Row
                         gutter={{ xs: 8, sm: 16, md: 24, lg: 32, height: 150 }}
-                        justify="space-around"
-                        style={{ overflow: 'hidden' }}
+                        justify="center"
+                        style={{ overflow: 'hidden', margin: '0' }}
                     >
                         <Col>
-                            <Row>
-                                <Card
-                                    align="center"
-                                    style={{
-                                        width: 400,
-                                        background: '#F72585',
-                                    }}
-                                    hoverable
-                                >
-                                    <Title level={2}>Play</Title>
-                                    <Row justify="space-around" align="middle">
-                                        <Col style={{ height: '50%' }} span={24}>
-                                            <Input
-                                                value={username}
-                                                onChange={(e) => {
-                                                    this.setState({
-                                                        username: e.target.value,
-                                                    })
-                                                }}
-                                                placeholder="Username"
-                                                prefix={<UserOutlined />}
-                                            />
-                                            <br />
-                                            <br />
-                                            <Input
-                                                value={roomId}
-                                                onChange={(e) => {
-                                                    this.setState({
-                                                        roomId: e.target.value,
-                                                    })
-                                                }}
-                                                placeholder="Room Id"
-                                                prefix={<UsergroupAddOutlined />}
-                                            />
-                                            <Text>{roomError}</Text>
-                                        </Col>
-                                        <Col
-                                            style={{
-                                                height: '50%',
+                            <Card
+                                align="center"
+                                style={{
+                                    width: 400,
+                                    background: '#F72585',
+                                }}
+                                hoverable
+                            >
+                                <Title level={2}>Play</Title>
+                                <Row>
+                                    <Col
+                                        style={{
+                                            height: 'auto',
+                                            textAlign: 'left',
+                                        }}
+                                        span={24}
+                                    >
+                                        <Text strong style={{ fontSize: '1.5em' }}>
+                                            Username:{' '}
+                                        </Text>
+                                        <Input
+                                            value={username}
+                                            onChange={(e) => {
+                                                this.setState({
+                                                    username: e.target.value,
+                                                })
                                             }}
-                                            span={24}
+                                            placeholder="chandler bingo"
+                                            prefix={<UserOutlined />}
+                                        />
+                                        <br />
+                                        <br />
+                                        <Text strong style={{ fontSize: '1.5em' }}>
+                                            Room Id:{' '}
+                                        </Text>
+                                        <Input
+                                            value={roomId}
+                                            onChange={(e) => {
+                                                this.setState({
+                                                    roomId: e.target.value,
+                                                })
+                                            }}
+                                            placeholder="217"
+                                            prefix={<UsergroupAddOutlined />}
+                                        />
+                                        <Text>{roomError}</Text>
+                                    </Col>
+                                    <Col
+                                        style={{
+                                            height: 'auto',
+                                        }}
+                                        span={24}
+                                    >
+                                        <Button
+                                            style={{ margin: '1%' }}
+                                            size="large"
+                                            type="primary"
+                                            onClick={this.joinRoom}
                                         >
-                                            <Button
-                                                style={{ margin: '1%' }}
-                                                type="primary"
-                                                onClick={this.joinRoom}
-                                            >
-                                                Join Room
-                                            </Button>
-                                            <Button
-                                                style={{ margin: '1%' }}
-                                                type="primary"
-                                                onClick={this.createRoom}
-                                            >
-                                                Create Room
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                </Card>
-                            </Row>
+                                            Join Room
+                                        </Button>
+                                        <Button
+                                            style={{ margin: '1%' }}
+                                            size="large"
+                                            type="primary"
+                                            onClick={this.createRoom}
+                                        >
+                                            Create Room
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Card>
                         </Col>
                         <Col>
                             <Card

@@ -3,10 +3,7 @@
 }
 .body-container-col {
     height: 85%;
-    padding-top: 1%;
-}
-.card-container {
-    justify-content: space-evenly;
+    padding-bottom: 1%;
 }
 .title {
     padding-top: 1.5%;
