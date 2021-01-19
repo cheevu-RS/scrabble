@@ -1,0 +1,11 @@
+.title-container-col {
+    height: 15%;
+}
+.body-container-col {
+    height: 85%;
+    padding-bottom: 1%;
+}
+.title {
+    padding-top: 1.5%;
+    color: white !important;
+}
