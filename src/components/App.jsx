@@ -14,6 +14,7 @@ import './App.css'
 const mapStateToProps = (state) => {
     return {
         userData: state.userState,
+        gameData: state.gameState,
     }
 }
 
@@ -35,6 +36,24 @@ class App extends React.Component {
         }))
     }
 
+    submitMove = async () => {
+        const { userData, gameData } = this.props
+        const { currentMove } = gameData
+        const { username } = userData
+
+        // add score calculation logic
+
+        let score
+        // const response =
+        await fetch(`${env.API_BASE_URL}:${env.SOCKET_PORT}/game/id/submitMove`, {
+            method: 'POST',
+            body: JSON.stringify({ user: username, word: currentMove, score }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    }
+
     // eslint-disable-next-line consistent-return
     render() {
         const { userData } = this.props
@@ -53,6 +72,10 @@ class App extends React.Component {
                         <p> Room ID : {room}</p>
                         <h2> Letters </h2>
                         <Slate />
+                        <button type="button" onClick={this.submitMove}>
+                            {' '}
+                            Submit Move{' '}
+                        </button>
                         <button
                             type="button"
                             value="Rules"
@@ -96,6 +119,15 @@ App.propTypes = {
     userData: PropTypes.shape({
         room: PropTypes.string.isRequired,
         username: PropTypes.string.isRequired,
+    }).isRequired,
+    gameData: PropTypes.shape({
+        currentMove: PropTypes.arrayOf(
+            PropTypes.shape({
+                row: PropTypes.number.isRequired,
+                col: PropTypes.number.isRequired,
+                letter: PropTypes.string.isRequired,
+            }).isRequired
+        ).isRequired,
     }).isRequired,
 }
 export default connect(mapStateToProps)(App)

@@ -7,7 +7,7 @@ import {
     SET_USERNAME,
     SET_ROOMNAME,
 } from './actions'
-
+import { deleteFromArrayOfObjects } from './helpers'
 import { boardHeight, boardWidth, slateSize } from '../utils/constants'
 // Creating the initial state
 const createInitialState = () => {
@@ -42,6 +42,7 @@ const createInitialState = () => {
         boardTiles,
         slateTiles,
         selectedTile: null,
+        currentMove: [],
     }
 
     const userState = {
@@ -101,6 +102,14 @@ const reducer = (state = initialState, action) => {
                         }
                         return true
                     })
+
+                    // removing the letter from current move
+                    const { currentMove } = newState.gameState
+                    deleteFromArrayOfObjects(currentMove, {
+                        row,
+                        col,
+                        letter: selectedLetter,
+                    })
                 }
                 newState.gameState.selectedTile = null
             }
@@ -118,6 +127,14 @@ const reducer = (state = initialState, action) => {
                 const boardTile = newState.gameState.boardTiles[row][col]
                 boardTile.letter = ' '
                 boardTile.draggable = false
+
+                // if the letter was in the current move, remove it
+                const { currentMove } = newState.gameState
+                deleteFromArrayOfObjects(currentMove, {
+                    row,
+                    col,
+                    letter: sourceLetter,
+                })
             } else {
                 const slateTile = newState.gameState.slateTiles[sourcePosition]
                 slateTile.letter = ' '
@@ -130,6 +147,13 @@ const reducer = (state = initialState, action) => {
             const destinationTile = newState.gameState.boardTiles[row][col]
             destinationTile.letter = sourceLetter
             destinationTile.draggable = true
+
+            // add the letter into current move
+            newState.gameState.currentMove.push({
+                row,
+                col,
+                letter: sourceLetter,
+            })
 
             // Deselecting the selected letter
             newState.gameState.selectedTile = null
