@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Row, Col, Typography, Card, Input, Button } from 'antd'
 import { UserOutlined, UsergroupAddOutlined } from '@ant-design/icons'
-
+import { Redirect } from 'react-router-dom'
 import env from '../utils/env'
 import {
     setUsername as setUsernameConnect,
@@ -12,8 +12,8 @@ import {
 import './Home.css'
 import 'antd/dist/antd.css'
 
-const mapStateToProps = () => {
-    return {}
+const mapStateToProps = (state) => {
+    return { userData: state.userState }
 }
 
 const mapDispatchToProps = {
@@ -80,7 +80,9 @@ class Home extends React.Component {
     render() {
         const { username, roomId, roomError } = this.state
         const { Title, Text } = Typography
-
+        const { userData } = this.props
+        const { username: reduxUsername, room: reduxRoom } = userData
+        if (reduxUsername !== '' && reduxRoom !== '') return <Redirect to="/lobby" />
         return (
             <Row
                 type="flex"
@@ -191,5 +193,9 @@ class Home extends React.Component {
 Home.propTypes = {
     setRoomname: PropTypes.func.isRequired,
     setUsername: PropTypes.func.isRequired,
+    userData: PropTypes.shape({
+        room: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
+    }).isRequired,
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

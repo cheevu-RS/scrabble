@@ -1,133 +1,59 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import io from 'socket.io-client'
 import PropTypes from 'prop-types'
+import { Redirect, Switch, Route, Link } from 'react-router-dom'
 import Home from './Home'
-import Board from './Board'
-import Slate from './Slate'
-import ScoreBoard from './ScoreBoard'
-import Chatbox from './Chatbox'
-import env from '../utils/env'
-import Rules from './Rules'
-import './App.css'
+import Lobby from './Lobby'
+import Game from './Game'
 
 const mapStateToProps = (state) => {
     return {
         userData: state.userState,
-        gameData: state.gameState,
     }
 }
 
-class App extends React.Component {
-    socket = io(`${env.API_BASE_URL}:${env.SOCKET_PORT}`)
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            isBoardVisible: true,
-            isRulesVisible: false,
-        }
-    }
-
-    toggleGameRules = () => {
-        this.setState((prevState) => ({
-            isBoardVisible: !prevState.isBoardVisible,
-            isRulesVisible: !prevState.isRulesVisible,
-        }))
-    }
-
-    submitMove = async () => {
-        const { userData, gameData } = this.props
-        const { currentMove } = gameData
-        const { username } = userData
-
-        // add score calculation logic
-
-        let score
-        // const response =
-        await fetch(`${env.API_BASE_URL}:${env.SOCKET_PORT}/game/id/submitMove`, {
-            method: 'POST',
-            body: JSON.stringify({ user: username, word: currentMove, score }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-    }
-
-    // eslint-disable-next-line consistent-return
+class App extends React.PureComponent {
     render() {
         const { userData } = this.props
         const { username, room } = userData
-        const { isBoardVisible, isRulesVisible } = this.state
-        if (username === '' || room === '') {
-            return <Home />
-        }
-        if (isBoardVisible) {
-            return (
-                <div className="App">
-                    <div className="slate">
-                        <h2> Score </h2>
-                        <ScoreBoard />
-                        <h2> Room Info </h2>
-                        <p> Room ID : {room}</p>
-                        <h2> Letters </h2>
-                        <Slate />
-                        <button type="button" onClick={this.submitMove}>
-                            {' '}
-                            Submit Move{' '}
-                        </button>
-                        <button
-                            type="button"
-                            value="Rules"
-                            onClick={this.toggleGameRules}
-                        >
-                            {' '}
-                            See Game Rules{' '}
-                        </button>
-                    </div>
-                    <div className="board">
-                        <h2> Board </h2>
-                        <Board />
-                    </div>
-                    <div className="chat">
-                        <h2> Chatbox </h2>
-                        <Chatbox socket={this.socket} />
-                    </div>
-                </div>
-            )
-        }
-        if (isRulesVisible) {
-            return (
-                <div className="rules">
-                    <Rules />
-                    <div className="Btn-div">
-                        <button
-                            type="button"
-                            className="back"
-                            onClick={this.toggleGameRules}
-                        >
-                            {' '}
-                            Show Board{' '}
-                        </button>
-                    </div>
-                </div>
-            )
-        }
+        return (
+            <Switch>
+                <Route exact path="/home" component={Home} />
+                <Route exact path="/lobby" component={Lobby} />
+                <Route exact path="/game" component={Game} />
+                <Route
+                    exact
+                    path="/"
+                    render={() =>
+                        username === '' || room === '' ? (
+                            <Redirect to="/home" />
+                        ) : (
+                            <Redirect to="/lobby" />
+                        )
+                    }
+                />
+                <Route
+                    render={() => (
+                        <div>
+                            <h1>Error 404</h1>
+                            <h2>Oops! Page Could Not Be Found</h2>
+                            <p>
+                                Sorry but the page you are looking for does not
+                                exist, have been removed. name changed or is
+                                temporarily unavailable
+                            </p>
+                            <Link to="/">Back to homepage</Link>
+                        </div>
+                    )}
+                />
+            </Switch>
+        )
     }
 }
 App.propTypes = {
     userData: PropTypes.shape({
         room: PropTypes.string.isRequired,
         username: PropTypes.string.isRequired,
-    }).isRequired,
-    gameData: PropTypes.shape({
-        currentMove: PropTypes.arrayOf(
-            PropTypes.shape({
-                row: PropTypes.number.isRequired,
-                col: PropTypes.number.isRequired,
-                letter: PropTypes.string.isRequired,
-            }).isRequired
-        ).isRequired,
     }).isRequired,
 }
 export default connect(mapStateToProps)(App)
